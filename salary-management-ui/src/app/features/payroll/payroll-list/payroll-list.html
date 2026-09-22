@@ -1,0 +1,317 @@
+<div class="payroll-page">
+
+  <div class="page-header">
+
+    <div>
+
+      <div class="breadcrumb">
+        Management <span>/</span> Payroll
+      </div>
+
+      <h1>Payroll Management</h1>
+
+      <p>
+        Generate and monitor employee payroll.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- Generate Payroll -->
+
+  <div class="generate-card">
+
+    <div>
+
+      <h3>Generate Payroll</h3>
+
+      <p>
+        Generate payroll using the employee's salary record.
+      </p>
+
+    </div>
+
+
+    <div class="generate-form">
+
+      <input
+        type="number"
+        [(ngModel)]="employeeId"
+        placeholder="Employee ID"
+      />
+
+
+      <select [(ngModel)]="salaryMonth">
+
+        <option
+          *ngFor="let month of [1,2,3,4,5,6,7,8,9,10,11,12]"
+          [value]="month">
+
+          {{ getMonthName(month) }}
+
+        </option>
+
+      </select>
+
+
+      <input
+        type="number"
+        [(ngModel)]="salaryYear"
+        placeholder="Year"
+      />
+
+
+      <button
+        class="primary-button"
+        (click)="generatePayroll()"
+        [disabled]="generating">
+
+        {{ generating ? 'Generating...' : 'Generate Payroll' }}
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- Messages -->
+
+  <div
+    class="success-message"
+    *ngIf="successMessage">
+
+    ✓ {{ successMessage }}
+
+  </div>
+
+
+  <div
+    class="error-message"
+    *ngIf="errorMessage">
+
+    ⚠ {{ errorMessage }}
+
+  </div>
+
+
+  <!-- Summary -->
+
+  <div class="summary-card">
+
+    <div>
+
+      <span>Total Payroll Records</span>
+
+      <strong>
+        {{ payrolls.length }}
+      </strong>
+
+    </div>
+
+    <div>
+
+      <span>Total Net Payroll</span>
+
+      <strong>
+        ₹{{ totalNetPayroll | number:'1.0-0' }}
+      </strong>
+
+    </div>
+
+  </div>
+
+
+  <!-- Payroll Table -->
+
+  <div class="content-card">
+
+    <div class="toolbar">
+
+      <input
+        type="text"
+        [(ngModel)]="searchText"
+        (input)="applyFilters()"
+        placeholder="Search by employee ID..."
+      />
+
+
+      <select
+        [(ngModel)]="selectedYear"
+        (change)="applyFilters()">
+
+        <option value="ALL">
+          All Years
+        </option>
+
+        <option
+          *ngFor="let year of years"
+          [value]="year">
+
+          {{ year }}
+
+        </option>
+
+      </select>
+
+
+      <select
+        [(ngModel)]="selectedMonth"
+        (change)="applyFilters()">
+
+        <option value="ALL">
+          All Months
+        </option>
+
+        <option
+          *ngFor="let month of [1,2,3,4,5,6,7,8,9,10,11,12]"
+          [value]="month">
+
+          {{ getMonthName(month) }}
+
+        </option>
+
+      </select>
+
+
+      <button
+        class="secondary-button"
+        (click)="clearFilters()">
+
+        Clear
+
+      </button>
+
+
+      <button
+        class="refresh-button"
+        (click)="loadPayrolls()"
+        [disabled]="loading">
+
+        ↻ Refresh
+
+      </button>
+
+    </div>
+
+
+    <div
+      class="loading-bar"
+      *ngIf="loading">
+    </div>
+
+
+    <div class="table-wrapper">
+
+      <table
+        *ngIf="filteredPayrolls.length > 0">
+
+        <thead>
+
+          <tr>
+
+            <th>EMPLOYEE</th>
+            <th>PERIOD</th>
+            <th>GROSS SALARY</th>
+            <th>DEDUCTIONS</th>
+            <th>NET SALARY</th>
+            <th>STATUS</th>
+            <th>GENERATED</th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          <tr
+            *ngFor="let payroll of filteredPayrolls">
+
+            <td>
+
+              <strong>
+                EMP{{ payroll.employeeId }}
+              </strong>
+
+            </td>
+
+
+            <td>
+
+              {{ getMonthName(payroll.salaryMonth) }}
+              {{ payroll.salaryYear }}
+
+            </td>
+
+
+            <td>
+
+              ₹{{ payroll.grossSalary | number:'1.0-0' }}
+
+            </td>
+
+
+            <td class="deduction">
+
+              ₹{{ payroll.deductions | number:'1.0-0' }}
+
+            </td>
+
+
+            <td class="net-salary">
+
+              ₹{{ payroll.netSalary | number:'1.0-0' }}
+
+            </td>
+
+
+            <td>
+
+              <span class="status">
+
+                <span class="status-dot"></span>
+
+                {{ payroll.status }}
+
+              </span>
+
+            </td>
+
+
+            <td>
+
+              {{ payroll.generatedAt | date:'dd MMM yyyy, HH:mm' }}
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+
+      <div
+        class="empty-state"
+        *ngIf="!loading && filteredPayrolls.length === 0">
+
+        <div class="empty-icon">
+          ₹
+        </div>
+
+        <h3>No payroll records found</h3>
+
+        <p>
+          Generate payroll for an employee to see records here.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

@@ -3,9 +3,12 @@ package com.SalaryManagement.Application.Service;
 import com.SalaryManagement.Application.dto.EmployeeDTO;
 import com.SalaryManagement.Application.entity.Employee;
 import com.SalaryManagement.Application.repository.EmployeeRepository;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
+import org.springframework.stereotype.Service;
 
 @Service
 public class EmployeeService {
@@ -41,15 +44,23 @@ public class EmployeeService {
         return employeeRepository.save(employee);
     }
 
-    public List<Employee> getAllEmployees() {
-        return employeeRepository.findAll();
+    // ==============================
+    // PAGINATED EMPLOYEE LIST
+    // ==============================
+    public Page<Employee> getAllEmployees(int page, int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return employeeRepository.findAll(pageable);
     }
 
     public Employee getEmployeeById(Long id) {
 
         return employeeRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Employee not found with id: " + id));
+                        new RuntimeException(
+                                "Employee not found with id: " + id
+                        ));
     }
 
     public Employee updateEmployee(Long id, EmployeeDTO dto) {

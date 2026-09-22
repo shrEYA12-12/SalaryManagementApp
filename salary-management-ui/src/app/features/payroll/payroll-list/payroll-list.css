@@ -1,0 +1,353 @@
+.payroll-page {
+  min-height: calc(100vh - 70px);
+  padding: 32px 40px;
+  background: #f5f7fb;
+}
+
+.page-header {
+  margin-bottom: 25px;
+}
+
+.breadcrumb {
+  font-size: 13px;
+  color: #8a94a6;
+  margin-bottom: 8px;
+}
+
+.breadcrumb span {
+  margin: 0 7px;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 28px;
+  color: #172033;
+}
+
+.page-header p {
+  color: #7a8495;
+  font-size: 14px;
+}
+
+
+/* Generate */
+
+.generate-card {
+  background: white;
+
+  border: 1px solid #e6e9ef;
+  border-radius: 10px;
+
+  padding: 22px;
+
+  margin-bottom: 20px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 25px;
+}
+
+.generate-card h3 {
+  margin: 0;
+  color: #273142;
+}
+
+.generate-card p {
+  margin: 6px 0 0;
+  color: #8992a3;
+  font-size: 13px;
+}
+
+.generate-form {
+  display: flex;
+  gap: 9px;
+}
+
+.generate-form input,
+.generate-form select {
+  padding: 10px;
+
+  border: 1px solid #dfe3e9;
+  border-radius: 7px;
+
+  outline: none;
+}
+
+.primary-button {
+  padding: 10px 17px;
+
+  background: #2563eb;
+  color: white;
+
+  border: none;
+  border-radius: 7px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.primary-button:hover {
+  background: #1d4ed8;
+}
+
+.primary-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
+/* Messages */
+
+.success-message {
+  padding: 12px 15px;
+
+  background: #eaf8f0;
+  color: #16834d;
+
+  border-radius: 7px;
+
+  margin-bottom: 18px;
+
+  font-size: 13px;
+}
+
+.error-message {
+  padding: 12px 15px;
+
+  background: #fff3f3;
+  color: #b42318;
+
+  border-radius: 7px;
+
+  margin-bottom: 18px;
+
+  font-size: 13px;
+}
+
+
+/* Summary */
+
+.summary-card {
+  background: white;
+
+  border: 1px solid #e6e9ef;
+  border-radius: 10px;
+
+  padding: 20px;
+
+  margin-bottom: 20px;
+
+  display: flex;
+  gap: 70px;
+}
+
+.summary-card span {
+  display: block;
+
+  color: #8992a3;
+
+  font-size: 13px;
+}
+
+.summary-card strong {
+  display: block;
+
+  margin-top: 5px;
+
+  color: #172033;
+
+  font-size: 22px;
+}
+
+
+/* Content */
+
+.content-card {
+  background: white;
+
+  border: 1px solid #e6e9ef;
+  border-radius: 10px;
+
+  overflow: hidden;
+}
+
+
+/* Toolbar */
+
+.toolbar {
+  display: flex;
+  gap: 10px;
+
+  padding: 18px;
+
+  border-bottom: 1px solid #edf0f4;
+}
+
+.toolbar input {
+  flex: 1;
+  max-width: 350px;
+
+  padding: 10px 13px;
+
+  border: 1px solid #dfe3e9;
+  border-radius: 7px;
+}
+
+.toolbar select,
+.secondary-button,
+.refresh-button {
+  padding: 10px 13px;
+
+  border: 1px solid #dfe3e9;
+  border-radius: 7px;
+
+  background: white;
+
+  cursor: pointer;
+}
+
+
+/* Loading */
+
+.loading-bar {
+  height: 2px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #2563eb,
+    transparent
+  );
+}
+
+
+/* Table */
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background: #fafbfc;
+}
+
+th {
+  padding: 13px 18px;
+
+  text-align: left;
+
+  font-size: 11px;
+
+  color: #8b95a5;
+
+  white-space: nowrap;
+}
+
+td {
+  padding: 16px 18px;
+
+  border-top: 1px solid #edf0f4;
+
+  font-size: 13px;
+
+  color: #4b5563;
+
+  white-space: nowrap;
+}
+
+tbody tr:hover {
+  background: #fafcff;
+}
+
+.deduction {
+  color: #dc2626;
+}
+
+.net-salary {
+  color: #16834d;
+  font-weight: 700;
+}
+
+
+/* Status */
+
+.status {
+  display: inline-flex;
+
+  align-items: center;
+  gap: 6px;
+
+  padding: 5px 9px;
+
+  background: #eaf8f0;
+  color: #16834d;
+
+  border-radius: 20px;
+
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: currentColor;
+}
+
+
+/* Empty */
+
+.empty-state {
+  padding: 70px 20px;
+
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 35px;
+}
+
+.empty-state h3 {
+  color: #374151;
+}
+
+.empty-state p {
+  color: #8992a3;
+  font-size: 13px;
+}
+
+
+/* Responsive */
+
+@media (max-width: 1000px) {
+
+  .payroll-page {
+    padding: 20px;
+  }
+
+  .generate-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .generate-form {
+    flex-wrap: wrap;
+  }
+
+  .generate-form input,
+  .generate-form select,
+  .primary-button {
+    flex: 1;
+  }
+}

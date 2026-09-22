@@ -1,0 +1,612 @@
+<div class="employee-form-page">
+
+  <!-- =========================================================
+       HEADER
+  ========================================================== -->
+
+  <div class="page-header">
+
+    <div>
+
+      <div class="breadcrumb">
+        Management
+        <span>/</span>
+        Employees
+        <span>/</span>
+
+        {{ isEditMode ? 'Edit Employee' : 'Add Employee' }}
+      </div>
+
+      <h1>
+        {{ isEditMode ? 'Edit Employee' : 'Add Employee' }}
+      </h1>
+
+      <p>
+        {{
+          isEditMode
+            ? 'Update employee information and salary details.'
+            : 'Add a new employee to the organisation.'
+        }}
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================================================
+       ERROR MESSAGE
+  ========================================================== -->
+
+  <div
+    class="error-message"
+    *ngIf="errorMessage">
+
+    <span class="error-icon">
+      ⚠
+    </span>
+
+    <span>
+      {{ errorMessage }}
+    </span>
+
+  </div>
+
+
+  <!-- =========================================================
+       FORM
+  ========================================================== -->
+
+  <form
+    #employeeForm="ngForm"
+    (ngSubmit)="saveEmployee()">
+
+
+    <!-- =======================================================
+         BASIC INFORMATION
+    ======================================================== -->
+
+    <div class="form-card">
+
+      <div class="section-header">
+
+        <div class="section-icon">
+          👤
+        </div>
+
+        <div>
+
+          <h2>
+            Basic Information
+          </h2>
+
+          <p>
+            Personal and identification details
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="form-grid">
+
+
+        <!-- Employee Code -->
+
+        <div class="form-group">
+
+          <label>
+            Employee Code
+            <span>*</span>
+          </label>
+
+          <input
+            type="text"
+            name="employeeCode"
+            [(ngModel)]="employee.employeeCode"
+            placeholder="EMP001"
+            required
+          />
+
+        </div>
+
+
+        <!-- Email -->
+
+        <div class="form-group">
+
+          <label>
+            Email
+            <span>*</span>
+          </label>
+
+          <input
+            type="email"
+            name="email"
+            [(ngModel)]="employee.email"
+            placeholder="employee@company.com"
+            required
+          />
+
+        </div>
+
+
+        <!-- First Name -->
+
+        <div class="form-group">
+
+          <label>
+            First Name
+            <span>*</span>
+          </label>
+
+          <input
+            type="text"
+            name="firstName"
+            [(ngModel)]="employee.firstName"
+            placeholder="First name"
+            required
+          />
+
+        </div>
+
+
+        <!-- Last Name -->
+
+        <div class="form-group">
+
+          <label>
+            Last Name
+            <span>*</span>
+          </label>
+
+          <input
+            type="text"
+            name="lastName"
+            [(ngModel)]="employee.lastName"
+            placeholder="Last name"
+            required
+          />
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =======================================================
+         EMPLOYMENT INFORMATION
+    ======================================================== -->
+
+    <div class="form-card">
+
+      <div class="section-header">
+
+        <div class="section-icon">
+          💼
+        </div>
+
+        <div>
+
+          <h2>
+            Employment Information
+          </h2>
+
+          <p>
+            Department, designation and joining details
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="form-grid">
+
+
+        <!-- Department -->
+
+        <div class="form-group">
+
+          <label>
+            Department
+            <span>*</span>
+          </label>
+
+          <input
+            type="text"
+            name="department"
+            [(ngModel)]="employee.department"
+            placeholder="Engineering"
+            required
+          />
+
+        </div>
+
+
+        <!-- Designation -->
+
+        <div class="form-group">
+
+          <label>
+            Designation
+            <span>*</span>
+          </label>
+
+          <input
+            type="text"
+            name="designation"
+            [(ngModel)]="employee.designation"
+            placeholder="Software Engineer"
+            required
+          />
+
+        </div>
+
+
+        <!-- Joining Date -->
+
+        <div class="form-group">
+
+          <label>
+            Joining Date
+            <span>*</span>
+          </label>
+
+          <input
+            type="date"
+            name="joiningDate"
+            [(ngModel)]="employee.joiningDate"
+            required
+          />
+
+        </div>
+
+
+        <!-- Status -->
+
+        <div class="form-group">
+
+          <label>
+            Employment Status
+            <span>*</span>
+          </label>
+
+          <select
+            name="status"
+            [(ngModel)]="employee.status"
+            required>
+
+            <option value="ACTIVE">
+              Active
+            </option>
+
+            <option value="INACTIVE">
+              Inactive
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =======================================================
+         SALARY STRUCTURE
+    ======================================================== -->
+
+    <div class="form-card salary-card">
+
+      <div class="section-header">
+
+        <div class="section-icon salary-icon">
+          ₹
+        </div>
+
+        <div>
+
+          <h2>
+            Salary Structure
+          </h2>
+
+          <p>
+            Define the employee's current salary components
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="salary-grid">
+
+
+        <!-- Basic Salary -->
+
+        <div class="form-group">
+
+          <label>
+            Basic Salary
+            <span>*</span>
+          </label>
+
+          <div class="currency-input">
+
+            <span>₹</span>
+
+            <input
+              type="number"
+              name="basicSalary"
+              [(ngModel)]="salary.basicSalary"
+              min="0"
+              step="100"
+              placeholder="400000"
+              required
+            />
+
+          </div>
+
+          <small>
+            Fixed basic component of annual salary.
+          </small>
+
+        </div>
+
+
+        <!-- HRA -->
+
+        <div class="form-group">
+
+          <label>
+            HRA
+            <span>*</span>
+          </label>
+
+          <div class="currency-input">
+
+            <span>₹</span>
+
+            <input
+              type="number"
+              name="hra"
+              [(ngModel)]="salary.hra"
+              min="0"
+              step="100"
+              placeholder="160000"
+              required
+            />
+
+          </div>
+
+          <small>
+            House Rent Allowance.
+          </small>
+
+        </div>
+
+
+        <!-- Allowances -->
+
+        <div class="form-group">
+
+          <label>
+            Other Allowances
+            <span>*</span>
+          </label>
+
+          <div class="currency-input">
+
+            <span>₹</span>
+
+            <input
+              type="number"
+              name="allowances"
+              [(ngModel)]="salary.allowances"
+              min="0"
+              step="100"
+              placeholder="40000"
+              required
+            />
+
+          </div>
+
+          <small>
+            Other annual allowances.
+          </small>
+
+        </div>
+
+
+        <!-- Deductions -->
+
+        <div class="form-group">
+
+          <label>
+            Deductions
+            <span>*</span>
+          </label>
+
+          <div class="currency-input">
+
+            <span>₹</span>
+
+            <input
+              type="number"
+              name="deductions"
+              [(ngModel)]="salary.deductions"
+              min="0"
+              step="100"
+              placeholder="20000"
+              required
+            />
+
+          </div>
+
+          <small>
+            Annual deductions.
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <!-- =====================================================
+           SALARY SUMMARY
+      ====================================================== -->
+
+      <div class="salary-summary">
+
+        <div class="salary-summary-item">
+
+          <span>
+            Basic Salary
+          </span>
+
+          <strong>
+            ₹{{ salary.basicSalary || 0 | number:'1.0-0' }}
+          </strong>
+
+        </div>
+
+
+        <div class="salary-summary-item">
+
+          <span>
+            HRA
+          </span>
+
+          <strong>
+            ₹{{ salary.hra || 0 | number:'1.0-0' }}
+          </strong>
+
+        </div>
+
+
+        <div class="salary-summary-item">
+
+          <span>
+            Allowances
+          </span>
+
+          <strong>
+            ₹{{ salary.allowances || 0 | number:'1.0-0' }}
+          </strong>
+
+        </div>
+
+
+        <div class="salary-summary-item gross">
+
+          <span>
+            Gross Salary
+          </span>
+
+          <strong>
+            ₹{{ grossSalary | number:'1.0-0' }}
+          </strong>
+
+        </div>
+
+
+        <div class="salary-summary-item deduction">
+
+          <span>
+            Deductions
+          </span>
+
+          <strong>
+            − ₹{{ salary.deductions || 0 | number:'1.0-0' }}
+          </strong>
+
+        </div>
+
+
+        <div class="salary-summary-item net">
+
+          <span>
+            Net Salary
+          </span>
+
+          <strong>
+            ₹{{ netSalary | number:'1.0-0' }}
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <!-- Salary Period -->
+
+      <div class="salary-period">
+
+        <div>
+
+          <span class="period-label">
+            Salary Period
+          </span>
+
+          <strong>
+            {{ salary.salaryMonth }}/{{ salary.salaryYear }}
+          </strong>
+
+        </div>
+
+        <span class="period-note">
+          Current salary structure
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <!-- =======================================================
+         ACTIONS
+    ======================================================== -->
+
+    <div class="form-actions">
+
+      <button
+        type="button"
+        class="secondary-button"
+        (click)="cancel()"
+        [disabled]="loading">
+
+        Cancel
+
+      </button>
+
+
+      <button
+        type="submit"
+        class="primary-button"
+        [disabled]="loading">
+
+        <span *ngIf="loading">
+          Saving...
+        </span>
+
+        <span *ngIf="!loading">
+
+          {{
+            isEditMode
+              ? 'Update Employee'
+              : 'Add Employee'
+          }}
+
+        </span>
+
+      </button>
+
+    </div>
+
+  </form>
+
+</div>

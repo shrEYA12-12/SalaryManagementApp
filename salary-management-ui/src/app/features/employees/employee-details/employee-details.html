@@ -1,0 +1,423 @@
+<div class="employee-details-page">
+
+  <!-- =========================
+       PAGE HEADER
+  ========================== -->
+
+  <div class="page-header">
+
+    <div>
+
+      <div class="breadcrumb">
+
+        <button
+          type="button"
+          class="breadcrumb-link"
+          (click)="goBack()">
+
+          Management
+
+        </button>
+
+        <span>/</span>
+
+        <button
+          type="button"
+          class="breadcrumb-link"
+          (click)="goBack()">
+
+          Employees
+
+        </button>
+
+        <span>/</span>
+
+        <span>Employee Details</span>
+
+      </div>
+
+      <h1>
+        Employee Details
+      </h1>
+
+      <p>
+        View employee information and employment details.
+      </p>
+
+    </div>
+
+
+    <div class="header-actions">
+
+      <button
+        type="button"
+        class="secondary-button"
+        (click)="goBack()">
+
+        ← Back
+
+      </button>
+
+      <button
+        type="button"
+        class="primary-button"
+        (click)="editEmployee()"
+        [disabled]="!employee">
+
+        ✎ Edit Employee
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       ERROR
+  ========================== -->
+
+  <div
+    class="error-message"
+    *ngIf="errorMessage">
+
+    <span class="error-icon">
+      !
+    </span>
+
+    <span>
+      {{ errorMessage }}
+    </span>
+
+  </div>
+
+
+  <!-- =========================
+       LOADING
+  ========================== -->
+
+  <div
+    class="loading-container"
+    *ngIf="loading">
+
+    <div class="loading-line"></div>
+
+    <div class="loading-text">
+      Loading employee details...
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       CONTENT
+  ========================== -->
+
+  <div
+    class="details-content"
+    *ngIf="!loading && employee">
+
+
+    <!-- =========================
+         EMPLOYEE PROFILE
+    ========================== -->
+
+    <div class="profile-card">
+
+      <div class="profile-left">
+
+        <div class="profile-avatar">
+
+          {{
+            employee.firstName
+              ? employee.firstName.charAt(0).toUpperCase()
+              : '?'
+          }}
+
+        </div>
+
+        <div class="profile-info">
+
+          <h2>
+
+            {{ employee.firstName || '' }}
+            {{ employee.lastName || '' }}
+
+          </h2>
+
+          <div class="profile-meta">
+
+            <span>
+              {{ employee.employeeCode || '-' }}
+            </span>
+
+            <span class="meta-separator">
+              •
+            </span>
+
+            <span>
+              {{ employee.designation || '-' }}
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <span
+        class="status-badge"
+        [class.active]="employee.status === 'ACTIVE'"
+        [class.inactive]="employee.status !== 'ACTIVE'">
+
+        <span class="status-dot"></span>
+
+        {{ employee.status || 'UNKNOWN' }}
+
+      </span>
+
+    </div>
+
+
+    <!-- =========================
+         BASIC INFORMATION
+    ========================== -->
+
+    <div class="details-card">
+
+      <div class="section-header">
+
+        <div class="section-icon">
+          👤
+        </div>
+
+        <div>
+
+          <h2>
+            Personal Information
+          </h2>
+
+          <p>
+            Basic contact information of the employee.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="information-grid">
+
+        <div class="information-item">
+
+          <span class="information-label">
+            First Name
+          </span>
+
+          <strong>
+            {{ employee.firstName || '-' }}
+          </strong>
+
+        </div>
+
+
+        <div class="information-item">
+
+          <span class="information-label">
+            Last Name
+          </span>
+
+          <strong>
+            {{ employee.lastName || '-' }}
+          </strong>
+
+        </div>
+
+
+        <div class="information-item">
+
+          <span class="information-label">
+            Email Address
+          </span>
+
+          <strong>
+            {{ employee.email || '-' }}
+          </strong>
+
+        </div>
+
+
+        <div class="information-item">
+
+          <span class="information-label">
+            Employee Code
+          </span>
+
+          <strong>
+            {{ employee.employeeCode || '-' }}
+          </strong>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =========================
+         EMPLOYMENT INFORMATION
+    ========================== -->
+
+    <div class="details-card">
+
+      <div class="section-header">
+
+        <div class="section-icon employment-icon">
+          💼
+        </div>
+
+        <div>
+
+          <h2>
+            Employment Information
+          </h2>
+
+          <p>
+            Department, designation and employment details.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="information-grid">
+
+        <div class="information-item">
+
+          <span class="information-label">
+            Department
+          </span>
+
+          <strong>
+            {{ employee.department || '-' }}
+          </strong>
+
+        </div>
+
+
+        <div class="information-item">
+
+          <span class="information-label">
+            Designation
+          </span>
+
+          <strong>
+            {{ employee.designation || '-' }}
+          </strong>
+
+        </div>
+
+
+        <div class="information-item">
+
+          <span class="information-label">
+            Joining Date
+          </span>
+
+          <strong>
+
+            {{
+              employee.joiningDate
+                ? (employee.joiningDate | date:'dd MMM yyyy')
+                : '-'
+            }}
+
+          </strong>
+
+        </div>
+
+
+        <div class="information-item">
+
+          <span class="information-label">
+            Employment Status
+          </span>
+
+          <strong>
+
+            {{ employee.status || 'UNKNOWN' }}
+
+          </strong>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =========================
+         SALARY & COMPENSATION
+    ========================== -->
+
+    <div class="details-card salary-security-card">
+
+      <div class="section-header">
+
+        <div class="section-icon salary-icon">
+          ₹
+        </div>
+
+        <div>
+
+          <h2>
+            Salary &amp; Compensation
+          </h2>
+
+          <p>
+            Salary information is restricted and requires authorization.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="salary-locked">
+
+        <div class="lock-icon">
+          🔒
+        </div>
+
+        <div class="locked-content">
+
+          <h3>
+            Salary information is restricted
+          </h3>
+
+          <p>
+            Authorized access is required to view salary,
+            allowances, deductions and compensation details.
+          </p>
+
+          <button
+            type="button"
+            class="unlock-button"
+            (click)="unlockSalary()">
+
+            🔓 Unlock Salary
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+  </div>
+
+</div>

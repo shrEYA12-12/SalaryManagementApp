@@ -1,0 +1,596 @@
+<div class="employee-page">
+
+  <!-- =========================
+       PAGE HEADER
+  ========================== -->
+
+  <div class="page-header">
+
+    <div class="header-content">
+
+      <div class="breadcrumb">
+        Management
+        <span>/</span>
+        Employees
+      </div>
+
+      <h1>Employee Management</h1>
+
+      <p>
+        Manage employee information, departments and employment status.
+      </p>
+
+    </div>
+
+    <button
+      type="button"
+      class="primary-button add-button"
+      (click)="addEmployee()">
+
+      <span class="button-icon">+</span>
+      Add Employee
+
+    </button>
+
+  </div>
+
+
+  <!-- =========================
+       SUMMARY
+  ========================== -->
+
+  <div class="summary-grid">
+
+    <!-- Total -->
+
+    <div class="summary-card">
+
+      <div class="summary-icon total-icon">
+        <span>👥</span>
+      </div>
+
+      <div class="summary-content">
+
+        <span class="summary-label">
+          Total Employees
+        </span>
+
+        <strong>
+          {{ employees.length }}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <!-- Active -->
+
+    <div class="summary-card">
+
+      <div class="summary-icon active-icon">
+        <span>✓</span>
+      </div>
+
+      <div class="summary-content">
+
+        <span class="summary-label">
+          Active Employees
+        </span>
+
+        <strong>
+          {{ activeEmployees }}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <!-- Inactive -->
+
+    <div class="summary-card">
+
+      <div class="summary-icon inactive-icon">
+        <span>○</span>
+      </div>
+
+      <div class="summary-content">
+
+        <span class="summary-label">
+          Inactive Employees
+        </span>
+
+        <strong>
+          {{ inactiveEmployees }}
+        </strong>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       MAIN CARD
+  ========================== -->
+
+  <div class="employee-card">
+
+    <!-- =========================
+         CARD HEADER
+    ========================== -->
+
+    <div class="card-header">
+
+      <div>
+
+        <h2>
+          All Employees
+        </h2>
+
+        <p>
+          View and manage employees in your organisation.
+        </p>
+
+      </div>
+
+      <button
+        type="button"
+        class="refresh-button"
+        (click)="loadEmployees()"
+        [disabled]="loading">
+
+        <span
+          class="refresh-icon"
+          [class.spinning]="loading">
+
+          ↻
+
+        </span>
+
+        {{ loading ? 'Refreshing...' : 'Refresh' }}
+
+      </button>
+
+    </div>
+
+
+    <!-- =========================
+         TOOLBAR
+    ========================== -->
+
+    <div class="toolbar">
+
+      <!-- Search -->
+
+      <div class="search-box">
+
+        <span class="search-icon">
+          ⌕
+        </span>
+
+        <input
+          type="text"
+          [(ngModel)]="searchText"
+          (input)="applyFilters()"
+          placeholder="Search by name, employee code, email..."
+        />
+
+      </div>
+
+
+      <!-- Department -->
+
+      <div class="filter-box">
+
+        <select
+          [(ngModel)]="selectedDepartment"
+          (change)="applyFilters()">
+
+          <option value="ALL">
+            All Departments
+          </option>
+
+          <option
+            *ngFor="let department of departments"
+            [value]="department">
+
+            {{ department }}
+
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <!-- Status -->
+
+      <div class="filter-box">
+
+        <select
+          [(ngModel)]="selectedStatus"
+          (change)="applyFilters()">
+
+          <option value="ALL">
+            All Status
+          </option>
+
+          <option value="ACTIVE">
+            Active
+          </option>
+
+          <option value="INACTIVE">
+            Inactive
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <!-- Clear -->
+
+      <button
+        type="button"
+        class="clear-button"
+        (click)="clearFilters()">
+
+        Clear
+
+      </button>
+
+    </div>
+
+
+    <!-- =========================
+         ERROR
+    ========================== -->
+
+    <div
+      class="error-message"
+      *ngIf="errorMessage">
+
+      <div class="error-left">
+
+        <span class="error-icon">
+          !
+        </span>
+
+        <span>
+          {{ errorMessage }}
+        </span>
+
+      </div>
+
+      <button
+        type="button"
+        (click)="loadEmployees()">
+
+        Retry
+
+      </button>
+
+    </div>
+
+
+    <!-- =========================
+         LOADING
+    ========================== -->
+
+    <div
+      class="loading-container"
+      *ngIf="loading">
+
+      <div class="loading-line"></div>
+
+      <div class="loading-text">
+        Loading employees...
+      </div>
+
+    </div>
+
+
+    <!-- =========================
+         TABLE
+    ========================== -->
+
+    <div
+      class="table-container"
+      *ngIf="!loading && filteredEmployees.length > 0">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th class="employee-column">
+              EMPLOYEE
+            </th>
+
+            <th>
+              DEPARTMENT
+            </th>
+
+            <th>
+              DESIGNATION
+            </th>
+
+            <th>
+              JOINING DATE
+            </th>
+
+            <th>
+              STATUS
+            </th>
+
+            <th class="action-column">
+              ACTIONS
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          <tr
+            *ngFor="let employee of filteredEmployees"
+            class="employee-row">
+
+
+            <!-- =========================
+                 EMPLOYEE
+            ========================== -->
+
+            <td>
+
+              <div class="employee-cell">
+
+                <div class="avatar">
+
+                  {{
+                    employee.firstName
+                      ? employee.firstName.charAt(0).toUpperCase()
+                      : '?'
+                  }}
+
+                </div>
+
+                <div class="employee-details">
+
+                  <!-- Employee name will open
+                       Employee Details -->
+
+                  <button
+                    type="button"
+                    class="employee-name"
+                    (click)="viewEmployee(employee.id)">
+
+                    {{ employee.firstName || '' }}
+                    {{ employee.lastName || '' }}
+
+                  </button>
+
+                  <span class="employee-code">
+
+                    {{ employee.employeeCode || '-' }}
+
+                  </span>
+
+                </div>
+
+              </div>
+
+            </td>
+
+
+            <!-- =========================
+                 DEPARTMENT
+            ========================== -->
+
+            <td>
+
+              <span class="department-text">
+
+                {{ employee.department || '-' }}
+
+              </span>
+
+            </td>
+
+
+            <!-- =========================
+                 DESIGNATION
+            ========================== -->
+
+            <td>
+
+              <span class="designation-text">
+
+                {{ employee.designation || '-' }}
+
+              </span>
+
+            </td>
+
+
+            <!-- =========================
+                 JOINING DATE
+            ========================== -->
+
+            <td>
+
+              <span
+                class="date-text"
+                *ngIf="employee.joiningDate">
+
+                {{ employee.joiningDate | date:'dd MMM yyyy' }}
+
+              </span>
+
+              <span
+                class="muted-text"
+                *ngIf="!employee.joiningDate">
+
+                -
+
+              </span>
+
+            </td>
+
+
+            <!-- =========================
+                 STATUS
+            ========================== -->
+
+            <td>
+
+              <span
+                class="status-badge"
+                [class.active]="employee.status === 'ACTIVE'"
+                [class.inactive]="employee.status !== 'ACTIVE'">
+
+                <span class="status-dot"></span>
+
+                {{ employee.status || 'UNKNOWN' }}
+
+              </span>
+
+            </td>
+
+
+            <!-- =========================
+                 ACTIONS
+            ========================== -->
+
+            <td>
+
+              <div class="action-buttons">
+
+                <!-- Edit -->
+
+                <button
+                  type="button"
+                  class="action-button edit-button"
+                  title="Edit employee"
+                  (click)="editEmployee(employee.id)">
+
+                  <span>✎</span>
+
+                </button>
+
+
+                <!-- Delete -->
+
+                <button
+                  type="button"
+                  class="action-button delete-button"
+                  title="Delete employee"
+                  (click)="deleteEmployee(employee.id)">
+
+                  <span>🗑</span>
+
+                </button>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+
+    <!-- =========================
+         EMPTY STATE
+    ========================== -->
+
+    <div
+      class="empty-state"
+      *ngIf="!loading && filteredEmployees.length === 0">
+
+      <div class="empty-icon">
+        👥
+      </div>
+
+      <h3>
+        No employees found
+      </h3>
+
+      <p>
+        No employees match your current search or filter criteria.
+      </p>
+
+      <button
+        type="button"
+        class="clear-filters-button"
+        (click)="clearFilters()">
+
+        Clear Filters
+
+      </button>
+
+    </div>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <div
+  class="table-footer"
+  *ngIf="!loading && totalElements > 0">
+
+  <span>
+    Showing
+    <strong>{{ showingFrom }}</strong>
+    -
+    <strong>{{ showingTo }}</strong>
+    of
+    <strong>{{ totalElements }}</strong>
+    employees
+  </span>
+
+  <div class="pagination">
+
+    <button
+      type="button"
+      class="pagination-button"
+      (click)="previousPage()"
+      [disabled]="currentPage === 0">
+      ‹ Previous
+    </button>
+
+    <button
+      type="button"
+      class="pagination-number"
+      *ngFor="let page of pageNumbers"
+      [class.active]="page === currentPage"
+      (click)="goToPage(page)">
+      {{ page + 1 }}
+    </button>
+
+    <button
+      type="button"
+      class="pagination-button"
+      (click)="nextPage()"
+      [disabled]="currentPage === totalPages - 1">
+      Next ›
+    </button>
+
+  </div>
+
+</div>
+
+  </div>
+
+</div>
